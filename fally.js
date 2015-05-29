@@ -12,6 +12,7 @@ var firstCloudRowY;
 
 var wallThickness = 50;                                                         // size in px
 var spaceBetweenWalls = 400;                                                    // size in px
+var minSpaceBetweenWalls = 200;
 var cloudWidth = 0.3;                                                           // size in percent / 100
 var fallSpeed = 5;
 
@@ -100,8 +101,7 @@ function Cloud (x, y, width, height) {
 
     this.collision = function (ball) {
 
-
-        if (ball.x - ball.radius >= this.x && ball.x + ball.radius <= this.x + width) {
+        if ((ball.x >= this.x) && (ball.x <= this.x + this.width)) {
             if (ball.y + ball.radius >= this.y) {
                 return true;
             }
@@ -137,6 +137,12 @@ function setSizeAndDrawBackground() {
 
     // walls.x *= kX;
     // walls.y *= kY;
+    for (var index = 0; index < clouds.length; index++) {
+        for (var i = 0; i < clouds[index].length; i++) {
+            clouds[index][i].x *= kX;
+            clouds[index][i].y *= kY;
+        }
+    }
 
     fg.width = newWidth;
     fg.height = newHeight;
@@ -181,12 +187,17 @@ function frame() {
     drawFg();
     if (!isSafeFly) {
         console.log('Game over');
+        ctxFg.font =  "bold 40px monospace";
+        ctxFg.fillStyle = '#d01200';
+        ctxFg.textAlign = "center";
+        ctxFg.fillText("Game Over", width/2, height/2);
         return;
     }
     requestId = window.requestAF(frame);
 }
 
 function update () {
+    // if (mousePos.x > ball.x )
     ball.x = mousePos.x;
     var collision = false;
 
@@ -197,14 +208,15 @@ function update () {
         clouds[index].move();
         if (clouds[index].detectCollision(ball))
             return false;
-
     }
 
     if (clouds[0].y < 0) {
         clouds.splice(0,1);
         score += 1;
+        if (score % 2 == 0) {
+            spaceBetweenWalls = Math.max(spaceBetweenWalls * 0.95, minSpaceBetweenWalls);
+        }
     }
-
     return true;
 }
 
