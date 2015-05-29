@@ -13,7 +13,7 @@ var firstCloudRowY;
 var wallThickness = 50;                                                         // size in px
 var spaceBetweenWalls = 400;                                                    // size in px
 var minSpaceBetweenWalls = 200;
-var cloudWidth = 0.3;                                                           // size in percent / 100
+var cloudWidth = 0.2;                                                           // size in percent / 100
 var fallSpeed = 5;
 
 var score;
@@ -150,6 +150,10 @@ function setSizeAndDrawBackground() {
     height = newHeight;
 
     drawBg();
+    ctxFg.font =  "bold 40px monospace";
+    ctxFg.fillStyle = '#d01200';
+    ctxFg.textAlign = "center";
+    ctxFg.fillText("Reload Game", width/2, height/2);
 }
 
 function drawBg () {
@@ -171,6 +175,7 @@ function drawFg () {
 
     ctxFg.font =  "40px monospace";
     ctxFg.textAlign = "right";
+    ctxFg.fillStyle = 'black';
     ctxFg.fillText(score, width - 20, 50);
 
     for (var index = 0; index < clouds.length; index++) {
@@ -228,9 +233,11 @@ function update () {
     if (clouds[0].y < 0) {
         clouds.splice(0,1);
         score += 1;
-        if (score % 5 == 0) {
-            spaceBetweenWalls = Math.max(spaceBetweenWalls * 0.95, minSpaceBetweenWalls);
-        }
+        if (score % 5 == 0)
+            spaceBetweenWalls = Math.max(spaceBetweenWalls * 0.9, minSpaceBetweenWalls);
+
+        if (score > 10)
+            cloudWidth = 0.3;
     }
     return true;
 }
