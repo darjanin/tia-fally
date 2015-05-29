@@ -10,11 +10,12 @@ var lastUpdate;
 var clouds = [];
 var firstCloudRowY;
 
-var wallThickness = 20;                                                         // size in px
-var spaceBetweenWalls = 200;                                                    // size in px
+var wallThickness = 50;                                                         // size in px
+var spaceBetweenWalls = 400;                                                    // size in px
 var cloudWidth = 0.3;                                                           // size in percent / 100
 var fallSpeed = 5;
 
+var score;
 var startGame = false;
 
 var ball = {
@@ -24,21 +25,27 @@ var ball = {
     color: "black",
     vx: undefined,
     vy: undefined,
+    imageFile: 'parachute.png',
+    img: undefined,
     init: function () {
         this.x = width / 2;
-        this.y = 40;
+        this.y = 60;
 
         var angle = Math.random() * 2 * Math.PI;
         var speed = Math.random() * 200 + 400;
 
         this.vx = Math.cos(angle) * speed;
         this.vy = Math.sin(angle) * speed;
+
+        this.img = new Image();
+        this.img.src = this.imageFile;
     },
     draw: function () {
-        ctxFg.beginPath();
-        ctxFg.fillStyle = this.color;
-        ctxFg.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-        ctxFg.fill();
+        ctxFg.drawImage(this.img, this.x - this.radius,this.y - this.radius, this.radius*2, this.radius*2);
+        // ctxFg.beginPath();
+        // ctxFg.fillStyle = this.color;
+        // ctxFg.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
+        // ctxFg.fill();
     }
 };
 
@@ -160,6 +167,10 @@ function drawFg () {
     ctxFg.clearRect(0, 0, width, height);
     ball.draw();
 
+    ctxFg.font =  "40px monospace";
+    ctxFg.textAlign = "right";
+    ctxFg.fillText(score, width - 20, 50);
+
     for (var index = 0; index < clouds.length; index++) {
         clouds[index].draw();
     }
@@ -178,9 +189,7 @@ function frame() {
 function update () {
     ball.x = mousePos.x;
     var collision = false;
-    if (clouds[0].y < 0) {
-        clouds.splice(0,1);
-    }
+
     if (clouds[clouds.length - 1].y < height - spaceBetweenWalls) {
         clouds.push(new CloudRow());
     }
@@ -190,6 +199,12 @@ function update () {
             return false;
 
     }
+
+    if (clouds[0].y < 0) {
+        clouds.splice(0,1);
+        score += 1;
+    }
+
     return true;
 }
 
@@ -201,9 +216,9 @@ function start() {
 
     mousePos.x = width / 2;
     mousePos.y = height / 2;
-    // walls.init();
     ball.init();
     clouds.push(new CloudRow());
+    score = 0;
 
     fg.addEventListener('mousemove', function(event) {
         mousePos.x = event.pageX;
