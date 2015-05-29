@@ -18,6 +18,7 @@ var fallSpeed = 5;
 
 var score;
 var startGame = false;
+var winScore = 100;
 
 var ball = {
     x: undefined,
@@ -43,10 +44,6 @@ var ball = {
     },
     draw: function () {
         ctxFg.drawImage(this.img, this.x - this.radius,this.y - this.radius, this.radius*2, this.radius*2);
-        // ctxFg.beginPath();
-        // ctxFg.fillStyle = this.color;
-        // ctxFg.arc(this.x, this.y, this.radius, 0, 2 * Math.PI, false);
-        // ctxFg.fill();
     }
 };
 
@@ -64,13 +61,13 @@ function CloudRow () {
     this.move = function () {
         var clouds = this.clouds;
         this.y -= this.vy;
-        // console.log(this.y);
         var y = this.y;
 
         for (var index = 0; index < clouds.length; index++) {
             clouds[index].y = y;
         }
     };
+
     this.detectCollision = function(ball) {
         var clouds = this.clouds;
 
@@ -135,8 +132,6 @@ function setSizeAndDrawBackground() {
     ball.x *= kX;
     ball.y *= kY;
 
-    // walls.x *= kX;
-    // walls.y *= kY;
     for (var index = 0; index < clouds.length; index++) {
         for (var i = 0; i < clouds[index].length; i++) {
             clouds[index][i].x *= kX;
@@ -193,12 +188,26 @@ function frame() {
         ctxFg.fillText("Game Over", width/2, height/2);
         return;
     }
+    if (score == winScore) {
+        console.log('You have survived!');
+        ctxFg.font =  "bold 40px monospace";
+        ctxFg.fillStyle = '#e0e000';
+        ctxFg.textAlign = "center";
+        ctxFg.fillText('You have survived!', width/2, height/2);
+        return;
+    }
     requestId = window.requestAF(frame);
 }
 
 function update () {
-    // if (mousePos.x > ball.x )
-    ball.x = mousePos.x;
+    if (mousePos.x < ball.radius) {
+        ball.x = ball.radius;
+    } else if (mousePos.x > width - ball.radius) {
+        ball.x = width - ball.radius;
+    } else {
+        ball.x = mousePos.x;
+    }
+
     var collision = false;
 
     if (clouds[clouds.length - 1].y < height - spaceBetweenWalls) {
@@ -213,7 +222,7 @@ function update () {
     if (clouds[0].y < 0) {
         clouds.splice(0,1);
         score += 1;
-        if (score % 2 == 0) {
+        if (score % 5 == 0) {
             spaceBetweenWalls = Math.max(spaceBetweenWalls * 0.95, minSpaceBetweenWalls);
         }
     }
