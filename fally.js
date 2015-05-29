@@ -20,6 +20,8 @@ var score;
 var startGame = false;
 var winScore = 100;
 
+var cloudCounter = 0;
+
 var ball = {
     x: undefined,
     y: undefined,
@@ -211,7 +213,10 @@ function update () {
     var collision = false;
 
     if (clouds[clouds.length - 1].y < height - spaceBetweenWalls) {
-        clouds.push(new CloudRow());
+        if (cloudCounter < winScore - 1) {
+            cloudCounter++;
+            clouds.push(new CloudRow());
+        }
     }
     for (var index = 0; index < clouds.length; index++) {
         clouds[index].move();
