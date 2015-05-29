@@ -18,7 +18,7 @@ var fallSpeed = 5;
 
 var score;
 var startGame = false;
-var winScore = 100;
+var winScore = 20; // 100 is hard to demonstrate
 
 var cloudCounter = 0;
 
@@ -26,7 +26,6 @@ var ball = {
     x: undefined,
     y: undefined,
     radius: wallThickness,
-    color: "black",
     vx: undefined,
     vy: undefined,
     imageFile: 'parachute.png',
@@ -220,8 +219,10 @@ function update () {
     }
     for (var index = 0; index < clouds.length; index++) {
         clouds[index].move();
-        if (clouds[index].detectCollision(ball))
+        if (clouds[index].detectCollision(ball)) {
+            playSound();
             return false;
+        }
     }
 
     if (clouds[0].y < 0) {
@@ -232,6 +233,11 @@ function update () {
         }
     }
     return true;
+}
+
+function playSound() {
+    splash.currentTime = 0;
+    splash.play();
 }
 
 function start() {
