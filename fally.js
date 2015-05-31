@@ -11,7 +11,7 @@ var clouds = [];
 var firstCloudRowY;
 
 var wallThickness = 50;                                                         // size in px
-var spaceBetweenWalls = 400;                                                    // size in px
+var spaceBetweenWalls = 600;                                                    // size in px
 var minSpaceBetweenWalls = 200;
 var cloudWidth = 0.2;                                                           // size in percent / 100
 var fallSpeed = 5;
@@ -234,10 +234,8 @@ function update () {
         clouds.splice(0,1);
         score += 1;
         if (score % 5 == 0)
-            spaceBetweenWalls = Math.max(spaceBetweenWalls * 0.9, minSpaceBetweenWalls);
+            spaceBetweenWalls = Math.max(spaceBetweenWalls * 0.95, minSpaceBetweenWalls);
 
-        if (score > 10)
-            cloudWidth = 0.3;
     }
     return true;
 }
