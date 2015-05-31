@@ -18,7 +18,7 @@ var fallSpeed = 5;
 
 var score;
 var startGame = false;
-var winScore = 20; // 100 is hard to demonstrate
+var winScore = 100; // 100 is hard to demonstrate
 
 var cloudCounter = 0;
 
