@@ -3,12 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Fally</title>
-  <style>
-    body { margin: 0; padding: 0; overflow: hidden; }
-    canvas { margin: 0; padding: 0; position: absolute; }
-    #bg { z-index: 0; }
-    #fg { z-index: 1; }
-  </style>
+  <link rel="stylesheet" href="style.css">
   <script src="fally.js"></script>
 </head>
 <body onload="start();">
@@ -16,7 +11,12 @@
     <source src="splash.ogg"/>
     <source src="splash.mp3"/>
   </audio>
+  <span id="hello"></span>
+
+
   <canvas id="bg"></canvas>
   <canvas id="fg"></canvas>
+  <div class="">
+  </div>
 </body>
 </html>
